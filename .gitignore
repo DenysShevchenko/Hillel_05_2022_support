@@ -1,6 +1,8 @@
-# venv folder
-venv/
-
 # Editors / IDE
-.idea/
 .vscode/
+
+# Python stuff
+__pycache__/
+
+# Sqlite
+*.sqlite3
