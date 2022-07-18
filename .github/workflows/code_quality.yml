@@ -25,8 +25,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run black
-      run: black ./
+      run: black --check ./
     - name: Run flake8
       run: flake8 ./   
     - name: Run isort
-      run: isort
+      run: isort --check-only ./
