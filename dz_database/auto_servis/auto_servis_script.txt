@@ -1,0 +1,130 @@
+
+USE autoService_sheva
+GO
+
+---СОЗДАЕМ таблицы баз данных 
+--- таблица №1 "Клиенты"
+
+
+CREATE TABLE Clients 
+(
+	ClientId smallint IDENTITY NOT NULL,
+	First_name Varchar(50) NOT NULL, --
+	Last_name Varchar(50) NOT NULL, --
+	telefon Varchar(13) NOT NULL, -- 
+	adress Varchar(250) NOT NULL --
+	PRIMARY KEY (ClientId)
+)
+GO
+
+INSERT INTO Clients																			   
+VALUES
+('Діма',  'Смол', '+380957777778',  'Київ Хрещатик 40'), 
+('Сергій',  'Біг', '+380957777777', 'м. Київ Хрещатик 41'),
+('Артем',  'Духов',  '+380957777779', 'м. Київ Хрещатик 42'),
+('Влад',  'Грін', '+380957777771',  'м. Київ Хрещатик 43'),
+('Саша',  'Блек', '+380957777772', 'м. Київ Хрещатик 44' ),
+('Джон',  'Грей', '+380957777773', 'м. Київ Хрещатик 45' ),
+('Тарас',  'Рибак', '+380957777774', 'м. Київ Хрещатик 46' ),
+('Назар',  'Лось', '+380957777775', 'м. Київ Хрещатик 47' ),
+('Іра',  'Смол', '+380957777776', 'м. Київ Хрещатик 48' ),
+('Оля',  'Гуд', '+380957777780', 'м. Київ Хрещатик 49' )
+
+GO
+
+
+---СОЗДАЕМ таблицы баз данных 
+--- таблица №2 "Услуги"
+
+CREATE TABLE Services_ord 
+(
+	ServicId smallint IDENTITY NOT NULL,
+	name_ser Varchar(50) NOT NULL, --
+	PRIMARY KEY (ServicId)
+)
+GO
+
+INSERT INTO Services_ord																			   
+VALUES
+('Заміна масла'), 
+('Тех. обслуговування'),
+('Заміна резини')
+
+GO
+
+---СОЗДАЕМ таблицы баз данных 
+--- таблица №3 "Ціни"
+
+CREATE TABLE Prices 
+(
+	date_p date NOT NULL,
+	ServicId smallint NOT NULL FOREIGN KEY REFERENCES Services_ord(ServicId),
+	Price float
+)
+GO
+
+INSERT INTO Prices																			   
+VALUES
+('2022-01-01','1','100'), 
+('2022-02-01','1','150.50'), 
+('2022-03-01','1','99.50'), 
+('2022-01-01','3','222'), 
+('2022-02-01','3','555.50'), 
+('2022-06-01','3','999.50'), 
+('2022-01-01','2','77'), 
+('2022-02-01','2','88.50'), 
+('2022-07-01','2','111.50') 
+GO
+
+---СОЗДАЕМ таблицы баз данных 
+--- таблица №4 "Закази"
+
+CREATE TABLE Orders 
+
+(
+	OrderId smallint IDENTITY NOT NULL,
+	date_zam date,
+	date_prym date,
+	ClientId smallint NOT NULL FOREIGN KEY REFERENCES Clients(ClientId),
+	PRIMARY KEY (OrderId)
+)
+GO
+
+
+INSERT INTO Orders																			   
+VALUES
+('2022-01-15', '2022-01-16', '1'), 
+('2022-03-25', '2022-04-16', '1'), 
+('2022-06-01', '2022-06-06', '2') 
+
+go
+
+CREATE TABLE Order_Services 
+
+(
+	OrderId smallint NOT NULL FOREIGN KEY REFERENCES Orders(OrderId),
+	ServicId smallint NOT NULL FOREIGN KEY REFERENCES Services_ord(ServicId),
+	Amount int Not NULL,
+	Price float Not NULL,
+	Summa float Not NULL
+)
+GO
+
+INSERT INTO Order_Services																			   
+VALUES
+('1', '1', '1','100', '100'), 
+('1', '3', '2','555.5', '1111'), 
+('1', '2', '4','77', '308') 
+
+go
+
+select * from dbo.Clients
+GO
+select * from dbo.Services_ord
+GO
+select * from dbo.Prices
+GO
+select * from dbo.Orders
+GO
+select * from dbo.Order_Services
+GO

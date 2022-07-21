@@ -1,0 +1,58 @@
+
+USE socnetwork
+GO
+
+CREATE TABLE Roles_users 
+(
+	ID_rol smallint IDENTITY NOT NULL,
+	Name_user Varchar(50) NOT NULL --
+	PRIMARY KEY (ID_rol)
+)
+GO
+
+CREATE TABLE Profils_users 
+(
+	ID_prof smallint IDENTITY NOT NULL,
+	Name_user Varchar(50) NOT NULL --
+	PRIMARY KEY (ID_prof)
+)
+GO
+
+CREATE TABLE VydLikes -- вид лайков
+(
+	ID_Like smallint IDENTITY NOT NULL,
+	Name_Like Varchar(50) NOT NULL --
+	PRIMARY KEY (ID_Like)
+)
+GO
+
+CREATE TABLE Users_socnet 
+(
+	ID_User smallint IDENTITY NOT NULL,
+	First_name Varchar(50) NOT NULL, --
+	Last_name Varchar(50) NOT NULL, --
+	ID_rol smallint NOT NULL FOREIGN KEY REFERENCES Roles_users(ID_rol), 
+	ID_prof smallint NOT NULL FOREIGN KEY REFERENCES Profils_users(ID_prof)
+	PRIMARY KEY (ID_User)
+)
+GO
+
+
+CREATE TABLE Coments 
+(
+	ID_Coment smallint IDENTITY NOT NULL,
+	text_com Varchar(250) NOT NULL, --
+	ID_User smallint NOT NULL FOREIGN KEY REFERENCES Users_socnet(ID_User),
+	date_com smallint NOT NULL,
+	ID_Coment_owner smallint FOREIGN KEY REFERENCES Coments(ID_Coment)
+	PRIMARY KEY (ID_Coment)
+)
+GO
+
+CREATE TABLE Likes_Coment 
+(
+	ID_Coment smallint IDENTITY NOT NULL FOREIGN KEY REFERENCES Coments(ID_Coment),
+	ID_User smallint NOT NULL FOREIGN KEY REFERENCES Users_socnet(ID_User),
+	ID_Like smallint NOT NULL FOREIGN KEY REFERENCES VydLikes(ID_Like)
+)
+GO
