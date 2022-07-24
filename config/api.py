@@ -5,15 +5,7 @@ from dataclasses import asdict, dataclass
 import requests
 from django.http import JsonResponse
 
-# import json
-# from django.http import HttpResponse
-# from http import HTTPStatus
-# def home(request):
-#     headers = {"Content-Type": "application/json"}
-#     # message = "{'message': 'hello'}"
-#     data = {"message": "hello"}
-#     message = json.dumps(data)
-#     return HttpResponse(message, headers=headers, status=HTTPStatus.OK)
+import json
 
 
 def home(request):
@@ -59,37 +51,32 @@ class ExchangeRatesHistory:
     def write_in_history(instan):
 
         FILENAME = "history.json"
-
         add_new_line = True
-        str_instance = (
-            "from_="
-            + instan.from_
-            + ", to="
-            + instan.to
-            + ", value="
-            + instan.value
-            + "\n"
-        )
+        instance_dict = {"from_": instan.from_, " to": instan.to, "value": instan.value}
 
         for line in ExchangeRatesHistory.read_lines(FILENAME):
-            if line == str_instance:
-                add_new_line = False
+            if line != "\n":
+                if json.loads(line) == instance_dict:
+                    add_new_line = False
         if add_new_line is True:
-            with open(FILENAME, "a") as file_a:
-                file_a.write(str_instance)
-                file_a.close()
+            with open(FILENAME, "a") as json_file:
+
+                print(instance_dict)
+                json_file.write("\n")
+                json.dump(instance_dict, json_file)
+                json_file.close()
 
     def read_lines(FILENAME):
-        with open(FILENAME) as file:
+        with open(FILENAME) as json_file:
             while True:
-                line = file.readline()
+                line = json_file.readline()
                 if not line:
                     break
                 yield line
 
 
-# def btc_usd(request=None):
-def btc_usd(request):
+def btc_usd(request=None):
+    # def btc_usd(request): розкоментити
     # NOTE: Connect to the external exchange rates API
     API_KEY = "82I46WMYT3C7EX3J"
     url = (
@@ -97,10 +84,9 @@ def btc_usd(request):
         f"from_currency=BTC&to_currency=USD&apikey={API_KEY}"
     )
     response = requests.get(url)
-
     exchange_rate = ExchangeRate.from_response(response)
     ExchangeRatesHistory.add(exchange_rate)
-    return JsonResponse(asdict(exchange_rate))
+    # return JsonResponse(asdict(exchange_rate)) розкоментити
 
 
 def history(request):
@@ -108,8 +94,6 @@ def history(request):
 
 
 # закоментити
-
-
-# if __name__ == "__main__":
-#     print('1')
-#     btc_usd()
+if __name__ == "__main__":
+    print("1")
+    btc_usd()

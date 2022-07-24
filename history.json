@@ -1,11 +1,15 @@
-ExchangeRate(date_='2022-07-20 13:08:02', from_='BTC', to='USD', value='23830.00000000')ExchangeRate(date_='2022-07-20 13:11:01', from_='BTC', to='USD', value='23839.88000000')ExchangeRate(date_='2022-07-20 13:11:01', from_='BTC', to='USD', value='23839.88000000')date_=2022-07-20 13:22:01, from_=BTC, to=USD, value=23887.56000000
-date_=2022-07-20 13:22:01, from_=BTC, to=USD, value=23887.56000000
-date_=2022-07-20 13:23:02, from_=BTC, to=USD, value=23844.89000000
-date_=2022-07-20 13:23:02, from_=BTC, to=USD, value=23844.89000000
-date_=2022-07-20 13:26:01, from_=BTC, to=USD, value=23890.01000000
-date_=2022-07-20 13:26:01, from_=BTC, to=USD, value=23890.01000000
-date_=2022-07-20 13:26:01, from_=BTC, to=USD, value=23890.01000000
-date_=2022-07-20 13:27:02, from_=BTC, to=USD, value=23889.34000000date_=2022-07-20 13:28:00, from_=BTC, to=USD, value=23886.27000000from_=BTC, to=USD, value=23891.66000000
-from_=BTC, to=USD, value=23891.66000000
-from_=BTC, to=USD, value=23875.77000000
-from_=BTC, to=USD, value=23832.46000000
+
+
+{"from_": "BTC", " to": "USD", "value": "22840.08000000"}
+{"from_": "BTC", " to": "USD", "value": "22840.08000000"}
+{"from_": "BTC", " to": "USD", "value": "22840.08000000"}
+
+{"from_": "BTC", " to": "USD", "value": "22844.24000000"}
+{"from_": "BTC", " to": "USD", "value": "22816.23000000"}
+{"from_": "BTC", " to": "USD", "value": "22833.99000000"}
+{"from_": "BTC", " to": "USD", "value": "22842.62000000"}
+{"from_": "BTC", " to": "USD", "value": "22842.62000000"}
+{"from_": "BTC", " to": "USD", "value": "22842.62000000"}
+{"from_": "BTC", " to": "USD", "value": "22846.90000000"}
+{"from_": "BTC", " to": "USD", "value": "22797.25000000"}
+{"from_": "BTC", " to": "USD", "value": "22784.75000000"}
