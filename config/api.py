@@ -74,8 +74,7 @@ class ExchangeRatesHistory:
                 yield line
 
 
-def btc_usd(request=None):
-    # def btc_usd(request): розкоментити
+def btc_usd(request):
     # NOTE: Connect to the external exchange rates API
     API_KEY = "82I46WMYT3C7EX3J"
     url = (
@@ -85,7 +84,7 @@ def btc_usd(request=None):
     response = requests.get(url)
     exchange_rate = ExchangeRate.from_response(response)
     ExchangeRatesHistory.add(exchange_rate)
-    # return JsonResponse(asdict(exchange_rate)) розкоментити
+    return JsonResponse(asdict(exchange_rate))
 
 
 def history(request):
@@ -93,6 +92,6 @@ def history(request):
 
 
 # закоментити
-if __name__ == "__main__":
-    print("1")
-    btc_usd()
+# if __name__ == "__main__":
+#     print("1")
+#     btc_usd()
