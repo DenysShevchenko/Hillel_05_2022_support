@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass
 
 import requests
 from django.http import JsonResponse
-
-import json
 
 
 def home(request):
