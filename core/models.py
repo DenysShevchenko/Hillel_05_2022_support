@@ -47,7 +47,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updateed_at = models.DateTimeField(auto_now=True)
-    # date_joined = models.DateTimeField(default=timezone.now)
 
     objects = CustomUserManager()
 
