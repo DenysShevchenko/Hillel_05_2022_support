@@ -6,3 +6,6 @@ __pycache__/
 
 # Sqlite
 *.sqlite3
+
+# 
+history.json
