@@ -1,7 +1,8 @@
 # MY PROJECT SUPPORT IN HILLEL (05/2022)
+     
+    Backend сайта для тех. підтримки з використанням Django
 
-
-## Formatters
+## Опис файлів и каталогів проекту
 
 1. black
 2. isort
