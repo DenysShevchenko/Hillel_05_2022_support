@@ -1,17 +1,25 @@
+from typing import Optional
+
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.db import models
 
 from shared.django import TimeStampMixin
 
 
+DEFAULT_ROLES = {
+    "admin": 1,
+    "user": 2,
+}
+
+
 class CustomUserManager(UserManager):
-    """custom user manager"""
+    """Custom user manager."""
 
     def create_user(self, email, username=None, password=None, **kwargs):
         if not email:
-            raise ValueError("Email field is required")
+            raise ValueError("Email field is required.")
         if not password:
-            raise ValueError("Password field is required")
+            raise ValueError("Password field is required.")
 
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **kwargs)
@@ -20,16 +28,23 @@ class CustomUserManager(UserManager):
 
         return user
 
-    def create_superuser(self, email, username=None, password=None, **kwargs):
-        extra_fields: dict = {"is_superuser": True, "is_active": True, "is_staff": True}
-
-        return self.create_user(email, username, password, **extra_fields)
+    def create_superuser(self, email: str, username: Optional[str] = None, password: Optional[str] = None, **kwargs):
+        payload: dict = kwargs | {
+            "is_superuser": True,
+            "is_active": True,
+            "is_staff": True,
+            "role_id": DEFAULT_ROLES["admin"],
+        }
+        return self.create_user(email, username, password, **payload)
 
 
 class Role(TimeStampMixin):
     """User's role. Used for giving permissions."""
 
     name = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
@@ -45,7 +60,13 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    # role = models.ForeignKey(null=True, on_delete=False)
+    role = models.ForeignKey(
+        "Role",
+        null=True,
+        default=DEFAULT_ROLES["user"],
+        on_delete=models.SET_NULL,
+        related_name="users",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updateed_at = models.DateTimeField(auto_now=True)
