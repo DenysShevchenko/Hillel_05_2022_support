@@ -45,7 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "role", "email", "username", "first_name", "last_name", "age", "phone"]
 
- 
+
 class TicketSerializer(serializers.ModelSerializer):
     operator = UserSerializer()
     client = UserSerializer()
