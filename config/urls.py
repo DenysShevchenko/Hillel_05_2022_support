@@ -1,15 +1,8 @@
 from django.contrib import admin
-from django.urls import path
-
-from core.api.exchange_rates import btc_usd, history, home
-from core.api.tickets import get_all_tickets
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("home/", home),
-    # exchange_rates
-    path("btc_usd/", btc_usd),
-    path("history/", history),
-    # tickets
-    path("tickets/", get_all_tickets),
+    path("tickets/", include("core.urls")),
+    path("exchange_rates/", include("exchange_rates.urls")),
 ]
