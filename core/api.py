@@ -75,5 +75,5 @@ def get_all_tickets(request):
 def get_ticket(request, id_: int):
     tickets = Ticket.objects.get(id=id_)
     data = TicketSerializer(tickets).data
-    print('1')
+    print("1")
     return Response(data=data)
