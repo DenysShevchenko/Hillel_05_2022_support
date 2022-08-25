@@ -1,6 +1,6 @@
 from django.urls import path
 
-from core.api import request_tickets, get_ticket
+from core.api import get_ticket, request_tickets
 
 urlpatterns = [
     path("", request_tickets),
