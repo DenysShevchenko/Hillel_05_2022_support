@@ -8,43 +8,17 @@ from core.serializers import TicketLightSerializer, TicketSerializer
 
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
-# @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([AllowAny])
-def get_post_tickets(request):
-    if request.method == "GET":
-        tickets = Ticket.objects.all()
-        data = TicketLightSerializer(tickets, many=True).data
-        return Response(data=data)
+def request_tickets(request):
+    request_method = request.method
 
-    if request.user.is_anonymous is True:
+    if request_method != "GET" and request.user.is_anonymous is True:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    if request.method == "DELETE":
+    func_dict = get_func_dict()
+    method_func = func_dict.get(request_method)
 
-        ticket = find_ticket(id_=request.data["id"])
-        if ticket is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        ticket.delete()
-        return Response(status=status.HTTP_200_OK)
-    elif request.method == "PUT":
-        ticket = find_ticket(id_=request.data["id"])
-        if ticket is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = TicketLightSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        breakpoint()
-        serializer.update(ticket, validated_data=serializer.validated_data)
-        results = TicketSerializer(ticket).data
-        return Response(data=results, status=status.HTTP_200_OK)
-
-    serializer = TicketSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-
-    instance = serializer.create(serializer.validated_data)
-    results = TicketSerializer(instance).data
-
-    return Response(data=results, status=status.HTTP_201_CREATED)
+    return method_func(request)
 
 
 @api_view(["GET"])
@@ -53,6 +27,56 @@ def get_ticket(request, id_: int):
     tickets = Ticket.objects.get(id=id_)
     data = TicketSerializer(tickets).data
     return Response(data=data)
+
+
+def get_func_dict():
+
+    func_list = {
+        "GET": method_GET_tickets,
+        "POST": method_POST_tickets,
+        "PUT": method_PUT_tickets,
+        "DELETE": method_DELETE_tickets,
+    }
+
+    return func_list
+
+
+def method_GET_tickets(request):
+
+    tickets = Ticket.objects.all()
+    data = TicketLightSerializer(tickets, many=True).data
+    return Response(data=data)
+
+
+def method_DELETE_tickets(request):
+
+    ticket = find_ticket(id_=request.data["id"])
+    if ticket is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    ticket.delete()
+    return Response(status=status.HTTP_200_OK)
+
+
+def method_PUT_tickets(request):
+    ticket = find_ticket(id_=request.data["id"])
+    if ticket is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = TicketLightSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.update(ticket, validated_data=serializer.validated_data)
+    results = TicketSerializer(ticket).data
+    return Response(data=results, status=status.HTTP_200_OK)
+
+
+def method_POST_tickets(request):
+    serializer = TicketSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    instance = serializer.create(serializer.validated_data)
+    results = TicketSerializer(instance).data
+
+    return Response(data=results, status=status.HTTP_201_CREATED)
 
 
 def find_ticket(id_):
