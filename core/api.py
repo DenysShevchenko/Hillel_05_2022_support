@@ -14,13 +14,11 @@ from core.serializers import TicketLightSerializer, TicketSerializer
 class TicketsListAPI(ListAPIView):
     serializer_class = TicketLightSerializer
     queryset = Ticket.objects.all()
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
 
-        if self.request.user.is_anonymous is True:
-            return Ticket.objects.all()
-        elif self.request.user.role_id != 1:
+        if self.request.user.role_id != 1:
             return Ticket.objects.filter(client=self.request.user)
         else:
             return Ticket.objects.filter(operator=self.request.user) | Ticket.objects.filter(operator=None)
@@ -37,11 +35,10 @@ class TicketRetrieveAPI(RetrieveAPIView):
     serializer_class = TicketSerializer
     lookup_field = "id"
     lookup_url_kwarg = "id"
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        if self.request.user.is_anonymous is True:
-            return Ticket.objects.all()
-        elif self.request.user.role_id != 1:
+        if self.request.user.role_id != 1:
             return Ticket.objects.filter(client=self.request.user)
         else:
             return Ticket.objects.all()
@@ -53,10 +50,10 @@ class TicketsUpdateAPI(UpdateAPIView):
     serializer_class = TicketLightSerializer
     queryset = Ticket.objects.all()
 
-    def get_queryset(self):
-        breakpoint()
-        # if self.request.user.is_anonymous is True:
-        return Ticket.objects.all()
+    # def get_queryset(self):
+    #     # breakpoint()
+    #     # if self.request.user.is_anonymous is True:
+    #     return Ticket.objects.all()
 
 
 class TicketsDeleteAPI(DestroyAPIView):
@@ -66,7 +63,7 @@ class TicketsDeleteAPI(DestroyAPIView):
     queryset = Ticket.objects.all()
 
 
-class TicketMainAPI_id(TicketRetrieveAPI, TicketsUpdateAPI, TicketsDeleteAPI, TicketsCreateAPI, TicketsListAPI):
+class TicketMainAPI_id(TicketRetrieveAPI, TicketsUpdateAPI, TicketsDeleteAPI):
 
     queryset = Ticket.objects.all()
 
