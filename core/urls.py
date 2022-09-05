@@ -4,7 +4,6 @@ from django.urls import path
 # from core.api import TicketRetrieveAPI, TicketsCreateAPI, TicketsListAPI, TicketsUpdateAPI, TicketsDeleteAPI
 from core.api import TicketMainAPI, TicketMainAPI_id
 
-
 urlpatterns = [
     # path("", request_tickets),
     # # path("<int:id_>/", get_ticket),

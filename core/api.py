@@ -1,8 +1,14 @@
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+)
+from rest_framework.permissions import IsAuthenticated
+
 from core.models import Ticket
 from core.serializers import TicketLightSerializer, TicketSerializer
-
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated
 
 
 class TicketsListAPI(ListAPIView):
