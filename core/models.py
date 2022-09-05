@@ -8,6 +8,8 @@ class Ticket(TimeStampMixin):
     theme = models.CharField(max_length=255)
     description = models.TextField()
     resolved = models.BooleanField(default=False)
+
+    # NOTE: Only users with role=USER could be assigned as a client
     client = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -15,6 +17,8 @@ class Ticket(TimeStampMixin):
         blank=True,
         related_name="client_tickets",
     )
+
+    # NOTE: Only users with role=ADMIN could be assigned as a client
     operator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,

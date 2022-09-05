@@ -23,7 +23,7 @@ class TicketsListAPI(ListAPIView):
         elif self.request.user.role_id != 1:
             return Ticket.objects.filter(client=self.request.user)
         else:
-            return Ticket.objects.all()
+            return Ticket.objects.filter(operator=self.request.user) | Ticket.objects.filter(operator=None)
 
 
 class TicketsCreateAPI(CreateAPIView):

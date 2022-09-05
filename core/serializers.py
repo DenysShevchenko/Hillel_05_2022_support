@@ -1,6 +1,7 @@
 from itertools import chain
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from authentication.models import Role
@@ -56,7 +57,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs: dict):
         theme = attrs.get("theme")
-
+        breakpoint()
         if not theme:
             return attrs
 
@@ -64,8 +65,14 @@ class TicketSerializer(serializers.ModelSerializer):
 
         for element in chain.from_iterable(data):
             if element == theme:
-                raise ValueError("This ticket is already in the database")
+                raise ValidationError("This ticket is already in the database")
 
+        client_user = self.context["request"].user
+
+        if client_user.role_id == 1:
+            raise ValidationError("Admin can not create ticket")
+
+        attrs["client"] = client_user
         return attrs
 
 
