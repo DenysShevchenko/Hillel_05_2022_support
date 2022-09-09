@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
-from authentication.models import Role
+from authentication.models import DEFAULT_ROLES, Role
 from core.models import Ticket
 
 User = get_user_model()
@@ -57,7 +57,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs: dict):
         theme = attrs.get("theme")
-        breakpoint()
+        # breakpoint()
         if not theme:
             return attrs
 
@@ -69,7 +69,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
         client_user = self.context["request"].user
 
-        if client_user.role_id == 1:
+        if client_user.role_id == DEFAULT_ROLES["admin"]:
             raise ValidationError("Admin can not create ticket")
 
         attrs["client"] = client_user
@@ -83,3 +83,14 @@ class TicketLightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ["id", "theme", "description", "resolved", "operator", "client"]
+
+
+class TicketAssignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = ["operator"]
+
+    def validate(self, attrs: dict):
+        # NOTE: Add current user to the `attrs` object
+        attrs["operator"] = self.context["request"].user
+        return attrs
