@@ -7,18 +7,18 @@ from rest_framework.generics import (
     UpdateAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from authentication.models import DEFAULT_ROLES
 from core.models import Ticket
-
-# from core.permissions import OperatorOnly
+from core.permissions import OperatorOnly
 from core.serializers import (
     TicketAssignSerializer,
     TicketLightSerializer,
     TicketSerializer,
 )
+from core.services import TicketsCRUD
 
-# from rest_framework.response import Response
 # from rest_framework import status
 
 # from django.core.exceptions import ValidationError
@@ -127,3 +127,24 @@ class TicketMainAPI_id(TicketsUpdateAPI, TicketRetrieveAPI, TicketsDeleteAPI):
 class TicketMainAPI(TicketsListAPI, TicketsCreateAPI):
 
     queryset = Ticket.objects.all()
+
+
+class TicketResolveAPI(UpdateAPIView):
+    http_method_names = ["patch"]
+    permission_classes = [OperatorOnly]
+    serializer_class = TicketLightSerializer
+    lookup_field = "id"
+    lookup_url_kwarg = "id"
+
+    def get_queryset(self):
+        user = self.request.user
+        return Ticket.objects.filter(operator=user)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance = TicketsCRUD.change_resolved_status(instance)
+
+        # serializer = self.serializer_class(instance)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
